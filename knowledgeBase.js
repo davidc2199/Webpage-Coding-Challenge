@@ -28,26 +28,27 @@ function getPopularFruit(){
     // Retrieve stored data from localStorage on browser
     var storedData = JSON.parse(localStorage.getItem("mealHistory"))
     var mealChosen = document.getElementById("meals").value;
-    var fruitArray = [{fruit: "Apple", count: 0}, {fruit: "Banana", count: 0}, {fruit: "Orange", count:0}]
-    
+    var fruitArray = []
+
     // Add up the total counts of each fruit so far for chosen meal
     for (let i = 0; i < storedData.length; i++) {
         if (storedData[i].meal == mealChosen) {
-            if (storedData[i].fruit == "Apple") {
-                fruitArray[0].count++
-            }
-            if (storedData[i].fruit == "Banana") {
-                fruitArray[1].count++
-
-            }
-            if (storedData[i].fruit == "Orange") {
-                fruitArray[2].count++
+            // If the fruit exists in the fruitArray, increase its count, otherwise add fruit to array
+            if (typeof fruitArray.find(f => f.fruit === storedData[i].fruit) != "undefined") {
+                let currFruit = fruitArray.find(f => f.fruit === storedData[i].fruit)
+                currFruit.count++
+            } else {
+                let meal = {
+                    "fruit": storedData[i].fruit,
+                    "count": 1
+                }
+                fruitArray.push(meal)
             }
         }
     
     // Find most chosen fruit so far
     let tempMax = 0;
-    let tempFruit = "Apple"
+    let tempFruit = fruits.options[0]
     for (let i = 0; i < fruitArray.length; i++) {
         if (fruitArray[i].count > tempMax) {
             tempMax = fruitArray[i].count
